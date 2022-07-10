@@ -1,4 +1,4 @@
-from typing import *
+from typing import Iterable, List
 import statistics
 import dataclasses
 from imgdedup.phash import phash_image_file, hamming_distance_percent
@@ -23,7 +23,7 @@ def group_duplicate_images(
     for image in images:
         fit_group_ix = -1
         for ix, group in enumerate(groups):
-            phash_group = map(lambda i: i.phash, group)
+            phash_group = (i.phash for i in group)
             average_distance = _average_hamming_distance_percent(
                 phash,
                 phash_group,
@@ -44,5 +44,5 @@ def _average_hamming_distance_percent(
     phash: int,
     phash_group: Iterable[int],
 ) -> float:
-    distances = map(lambda p: hamming_distance_percent(phash, p), phash_group)
+    distances = (hamming_distance_percent(phash, ps) for ps in phash_group)
     return statistics.fmean(distances)
