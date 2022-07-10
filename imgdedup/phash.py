@@ -1,4 +1,4 @@
-from typing import *
+from typing import List
 from PIL import Image
 import math
 import statistics
