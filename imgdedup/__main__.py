@@ -9,15 +9,20 @@ from imgdedup import cli, fs, deduplicate
 
 
 def print_image_groups(image_groups: List[List[str]]) -> None:
+    pad_count = len(str(len(image_groups)))
+
     for ix, group in enumerate(image_groups):
-        print(str(ix).ljust(len(image_groups), "0") + ":")
+        header = str(ix).rjust(pad_count, "0") + ":"
+        print(header)
         for img in group:
             print("\t" + img)
 
 
 def copy_image_groups(image_groups: List[List[str]], outdir: str) -> None:
+    pad_count = len(str(len(image_groups)))
+
     for ix, group in enumerate(image_groups):
-        group_dir_name = str(ix).ljust(len(image_groups), "0")
+        group_dir_name = str(ix).rjust(pad_count, "0")
         group_dir = pathlib.join(outdir, group_dir_name)
 
         os.makedirs(group_dir)
@@ -25,8 +30,10 @@ def copy_image_groups(image_groups: List[List[str]], outdir: str) -> None:
 
 
 def move_image_groups(image_groups: List[List[str]], outdir: str) -> None:
+    pad_count = len(str(len(image_groups)))
+
     for ix, group in enumerate(image_groups):
-        group_dir_name = str(ix).ljust(len(image_groups), "0")
+        group_dir_name = str(ix).rjust(pad_count, "0")
         group_dir = pathlib.join(outdir, group_dir_name)
 
         os.makedirs(group_dir)
