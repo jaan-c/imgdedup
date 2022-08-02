@@ -5,7 +5,6 @@ import os
 from os import path as pathlib
 import shutil
 import random
-from PIL import Image
 from imgdedup import cli, fs, deduplicate
 
 
