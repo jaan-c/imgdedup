@@ -12,7 +12,7 @@ class CliMode(enum.Enum):
 
 
 DEFAULT_ARG_MODE = CliMode.PRINT
-DEFAULT_ARG_THRESHOLD = 0.4
+DEFAULT_ARG_THRESHOLD = 0.25
 
 
 @dataclasses.dataclass(frozen=True)
