@@ -37,7 +37,8 @@ def group_duplicate_images(
         else:
             groups.append([image])
 
-    return [[i.path for i in g] for g in groups]
+    duplicates = filter(lambda g: len(g) > 1, groups)
+    return [[i.path for i in g] for g in duplicates]
 
 
 def _average_hamming_distance_percent(
