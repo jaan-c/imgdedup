@@ -1,41 +1,41 @@
-from typing import Iterable, List
+from typing import Iterable, Iterator, List
 import statistics
 import dataclasses
 from imgdedup.phash import phash_image_file, hamming_distance_percent
 
 
 @dataclasses.dataclass(frozen=True)
-class _Image:
+class ImagePhash:
     path: str
     phash: int
 
 
-def group_duplicate_images(
-    paths: Iterable[str],
-    threshold: float,
-) -> List[List[str]]:
-    images: List[_Image] = []
+def phash_images(paths: Iterable[str]) -> Iterator[ImagePhash]:
     for p in paths:
         phash = phash_image_file(p)
-        images.append(_Image(p, phash))
+        yield ImagePhash(p, phash)
 
-    groups: List[List[_Image]] = []
-    for image in images:
+
+def group_duplicate_images(
+    image_phashes: Iterable[ImagePhash],
+    threshold: float,
+) -> List[List[str]]:
+    groups: List[List[ImagePhash]] = []
+    for imgp in image_phashes:
         fit_group_ix = -1
         for ix, group in enumerate(groups):
-            phash_group = (i.phash for i in group)
             average_distance = _average_hamming_distance_percent(
-                phash,
-                phash_group,
+                imgp.phash,
+                map(lambda i: i.phash, group),
             )
             if average_distance <= threshold:
                 fit_group_ix = ix
                 break
 
         if fit_group_ix > -1:
-            groups[fit_group_ix].append(image)
+            groups[fit_group_ix].append(imgp)
         else:
-            groups.append([image])
+            groups.append([imgp])
 
     duplicates = filter(lambda g: len(g) > 1, groups)
     return [[i.path for i in g] for g in duplicates]

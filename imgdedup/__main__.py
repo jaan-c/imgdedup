@@ -86,7 +86,10 @@ if __name__ == "__main__":
         sys.exit()
 
     images = fs.find_image_files(args.paths)
-    image_groups = deduplicate.group_duplicate_images(images, args.threshold)
+    image_phashes = deduplicate.phash_images(images)
+    image_groups = deduplicate.group_duplicate_images(
+        image_phashes, args.threshold
+    )
 
     if args.mode == cli.CliMode.PRINT:
         print_image_groups(image_groups)
